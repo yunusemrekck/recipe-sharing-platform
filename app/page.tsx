@@ -9,8 +9,7 @@ import Link from "next/link";
 import { ArrowRight, TrendingUp, Clock } from "lucide-react";
 
 export default function Home() {
-  const featuredRecipe = sampleRecipes[0];
-  const trendingRecipes = sampleRecipes.slice(1, 5);
+  const trendingRecipes = sampleRecipes.slice(0, 4);
   const recentRecipes = sampleRecipes.slice(4, 8);
 
   return (
@@ -20,27 +19,6 @@ export default function Home() {
       <main className="flex-1">
         {/* Hero Section */}
         <Hero />
-
-        {/* Featured Recipe Section */}
-        <section className="py-12 lg:py-16 bg-cream-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 rounded-full bg-terracotta-500/10 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-terracotta-500" />
-              </div>
-              <div>
-                <h2 className="font-display text-2xl lg:text-3xl font-bold text-charcoal-800">
-                  Featured Recipe
-                </h2>
-                <p className="text-charcoal-700/60 text-sm">
-                  Our editor&apos;s pick for this week
-                </p>
-              </div>
-            </div>
-
-            <RecipeCard recipe={featuredRecipe} featured />
-          </div>
-        </section>
 
         {/* Categories Section */}
         <CategorySection />
