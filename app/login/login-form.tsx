@@ -24,9 +24,9 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
     if (result?.error) {
       setError(result.error);
       setIsLoading(false);
-    } else if (redirectTo) {
-      router.push(redirectTo);
-    }
+    } 
+    // Login action içinde zaten redirect("/dashboard") var
+    // Bu kod parçasına hiç ulaşılmayacak çünkü server action redirect ediyor
   }
 
   return (

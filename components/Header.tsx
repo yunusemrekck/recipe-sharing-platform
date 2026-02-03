@@ -10,7 +10,7 @@ export async function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/dashboard" className="flex items-center gap-2 group">
             <div className="w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-terracotta-500 flex items-center justify-center group-hover:bg-terracotta-600 transition-colors">
               <ChefHat className="w-5 h-5 lg:w-6 lg:h-6 text-cream-50" />
             </div>
