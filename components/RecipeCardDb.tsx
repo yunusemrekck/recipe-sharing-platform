@@ -1,17 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import { Clock, Users, ChefHat } from "lucide-react";
 import type { RecipeWithAuthor } from "@/lib/types";
 
 interface RecipeCardDbProps {
   recipe: RecipeWithAuthor;
+  showAuthor?: boolean;
 }
 
-export function RecipeCardDb({ recipe }: RecipeCardDbProps) {
+export function RecipeCardDb({ recipe, showAuthor = true }: RecipeCardDbProps) {
   const authorName = recipe.profiles?.full_name || recipe.profiles?.username || "Anonim Chef";
+  const authorUsername = recipe.profiles?.username;
   const difficultyColors = {
     easy: "bg-green-100 text-green-700",
     medium: "bg-yellow-100 text-yellow-700",
     hard: "bg-red-100 text-red-700",
+  };
+
+  const handleAuthorClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
   };
 
   return (
@@ -49,7 +57,7 @@ export function RecipeCardDb({ recipe }: RecipeCardDbProps) {
           )}
 
           {/* Meta */}
-          <div className="flex items-center gap-3 text-xs text-charcoal-700/50 mb-3 pb-3 border-b border-cream-100">
+          <div className={`flex items-center gap-3 text-xs text-charcoal-700/50 ${showAuthor ? "mb-3 pb-3 border-b border-cream-100" : ""}`}>
             {recipe.cooking_time && (
               <span className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5" />
@@ -59,14 +67,26 @@ export function RecipeCardDb({ recipe }: RecipeCardDbProps) {
           </div>
 
           {/* Author */}
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full overflow-hidden bg-terracotta-100 flex items-center justify-center">
-              <Users className="w-3.5 h-3.5 text-terracotta-600" />
+          {showAuthor && (
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full overflow-hidden bg-terracotta-100 flex items-center justify-center">
+                <Users className="w-3.5 h-3.5 text-terracotta-600" />
+              </div>
+              {authorUsername ? (
+                <Link
+                  href={`/profile/${authorUsername}`}
+                  onClick={handleAuthorClick}
+                  className="text-xs text-charcoal-700/70 hover:text-terracotta-500 truncate transition-colors"
+                >
+                  {authorName}
+                </Link>
+              ) : (
+                <span className="text-xs text-charcoal-700/70 truncate">
+                  {authorName}
+                </span>
+              )}
             </div>
-            <span className="text-xs text-charcoal-700/70 truncate">
-              {authorName}
-            </span>
-          </div>
+          )}
         </div>
       </article>
     </Link>
