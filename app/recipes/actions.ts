@@ -233,6 +233,12 @@ export async function getRecipeById(recipeId: string): Promise<RecipeWithAuthor 
   return data as RecipeWithAuthor;
 }
 
+// Extended type for recipes with counts
+export type RecipeWithCounts = RecipeWithAuthor & {
+  likes_count?: number;
+  comments_count?: number;
+};
+
 /**
  * Get all published recipes with optional filters
  */
@@ -243,7 +249,7 @@ export async function getRecipes(options?: {
   limit?: number;
   offset?: number;
   sortBy?: "newest" | "oldest" | "popular";
-}): Promise<{ recipes: RecipeWithAuthor[]; count: number }> {
+}): Promise<{ recipes: RecipeWithCounts[]; count: number }> {
   const supabase = await createClient();
   const { category, difficulty, search, limit = 12, offset = 0, sortBy = "newest" } = options || {};
 
@@ -254,7 +260,9 @@ export async function getRecipes(options?: {
       profiles:user_id (
         username,
         full_name
-      )
+      ),
+      likes(count),
+      comments(count)
     `, { count: "exact" })
     .eq("is_published", true);
 
@@ -277,7 +285,7 @@ export async function getRecipes(options?: {
   } else if (sortBy === "oldest") {
     query = query.order("created_at", { ascending: true });
   }
-  // TODO: Add "popular" sorting when likes are implemented
+  // TODO: Add "popular" sorting based on likes count
 
   // Pagination
   query = query.range(offset, offset + limit - 1);
@@ -289,10 +297,14 @@ export async function getRecipes(options?: {
     return { recipes: [], count: 0 };
   }
 
-  return { 
-    recipes: (data as RecipeWithAuthor[]) || [], 
-    count: count || 0 
-  };
+  // Transform the data to include counts
+  const recipes = (data || []).map((recipe: Record<string, unknown>) => ({
+    ...recipe,
+    likes_count: (recipe.likes as { count: number }[])?.[0]?.count || 0,
+    comments_count: (recipe.comments as { count: number }[])?.[0]?.count || 0,
+  })) as RecipeWithCounts[];
+
+  return { recipes, count: count || 0 };
 }
 
 /**

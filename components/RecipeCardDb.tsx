@@ -2,12 +2,15 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Clock, Users, ChefHat } from "lucide-react";
+import { Clock, Users, ChefHat, Heart, MessageCircle } from "lucide-react";
 import type { RecipeWithAuthor } from "@/lib/types";
 import { RECIPE_CATEGORIES } from "@/lib/types";
 
 interface RecipeCardDbProps {
-  recipe: RecipeWithAuthor;
+  recipe: RecipeWithAuthor & { 
+    likes_count?: number;
+    comments_count?: number;
+  };
   showAuthor?: boolean;
 }
 
@@ -48,6 +51,24 @@ export function RecipeCardDb({ recipe, showAuthor = true }: RecipeCardDbProps) {
               <span className={`px-3 py-1 text-xs font-medium rounded-full ${difficultyColors[recipe.difficulty]}`}>
                 {recipe.difficulty === "easy" ? "Kolay" : recipe.difficulty === "medium" ? "Orta" : "Zor"}
               </span>
+            </div>
+          )}
+
+          {/* Likes & Comments Overlay */}
+          {(recipe.likes_count !== undefined || recipe.comments_count !== undefined) && (
+            <div className="absolute bottom-3 left-3 flex items-center gap-2">
+              {recipe.likes_count !== undefined && recipe.likes_count > 0 && (
+                <span className="flex items-center gap-1 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-medium text-charcoal-700">
+                  <Heart className="w-3 h-3 text-red-500 fill-red-500" />
+                  {recipe.likes_count}
+                </span>
+              )}
+              {recipe.comments_count !== undefined && recipe.comments_count > 0 && (
+                <span className="flex items-center gap-1 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-medium text-charcoal-700">
+                  <MessageCircle className="w-3 h-3 text-terracotta-500" />
+                  {recipe.comments_count}
+                </span>
+              )}
             </div>
           )}
         </div>

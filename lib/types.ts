@@ -37,6 +37,29 @@ export type RecipeUpdate = Partial<Omit<Recipe, "id" | "created_at" | "user_id">
 
 export type ProfileUpdate = Partial<Omit<Profile, "id" | "created_at">>;
 
+// Like type
+export type Like = {
+  id: string;
+  user_id: string;
+  recipe_id: string;
+  created_at: string;
+};
+
+// Comment type
+export type Comment = {
+  id: string;
+  user_id: string;
+  recipe_id: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+};
+
+// Comment with author profile
+export type CommentWithAuthor = Comment & {
+  profiles: Pick<Profile, "username" | "full_name"> | null;
+};
+
 // Recipe categories
 export const RECIPE_CATEGORIES = [
   { value: "soup", label: "Çorbalar" },

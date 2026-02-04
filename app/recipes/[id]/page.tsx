@@ -12,7 +12,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RecipeActions } from "@/components/RecipeActions";
 import { DeleteRecipeButton } from "@/components/DeleteRecipeButton";
+import { LikeButton } from "@/components/LikeButton";
+import { CommentsSection } from "@/components/CommentsSection";
 import { getRecipeById } from "@/app/recipes/actions";
+import { getLikeInfo, getComments } from "@/app/recipes/interactions";
 import { getUser } from "@/app/auth/actions";
 import { RECIPE_CATEGORIES, DIFFICULTY_LEVELS } from "@/lib/types";
 import type { Metadata } from "next";
@@ -37,9 +40,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function RecipeDetailPage({ params }: Props) {
   const { id } = await params;
-  const [recipe, user] = await Promise.all([
+  const [recipe, user, likeInfo, comments] = await Promise.all([
     getRecipeById(id),
     getUser(),
+    getLikeInfo(id),
+    getComments(id),
   ]);
 
   if (!recipe) {
@@ -166,6 +171,12 @@ export default async function RecipeDetailPage({ params }: Props) {
 
                 {/* Actions */}
                 <div className="flex items-center gap-2">
+                  <LikeButton 
+                    recipeId={recipe.id}
+                    initialLiked={likeInfo.userLiked}
+                    initialCount={likeInfo.count}
+                    isAuthenticated={!!user}
+                  />
                   <RecipeActions />
                   {isOwner && (
                     <>
@@ -189,7 +200,7 @@ export default async function RecipeDetailPage({ params }: Props) {
           </div>
 
           {/* Recipe Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
             {/* Ingredients */}
             <div className="lg:col-span-1">
               <div className="bg-white rounded-2xl border border-cream-200 shadow-sm p-6 sticky top-24">
@@ -226,6 +237,14 @@ export default async function RecipeDetailPage({ params }: Props) {
               </div>
             </div>
           </div>
+
+          {/* Comments Section */}
+          <CommentsSection 
+            recipeId={recipe.id}
+            initialComments={comments}
+            currentUserId={user?.id}
+            isAuthenticated={!!user}
+          />
         </div>
       </main>
 
