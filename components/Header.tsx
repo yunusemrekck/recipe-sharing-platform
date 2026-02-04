@@ -25,19 +25,19 @@ export async function Header() {
               href="/recipes"
               className="text-charcoal-700 hover:text-terracotta-500 transition-colors font-medium"
             >
-              Browse Recipes
+              Tarifler
             </Link>
             <Link
-              href="/categories"
+              href="/recipes?category=main"
               className="text-charcoal-700 hover:text-terracotta-500 transition-colors font-medium"
             >
-              Categories
+              Ana Yemekler
             </Link>
             <Link
-              href="/about"
+              href="/recipes?category=dessert"
               className="text-charcoal-700 hover:text-terracotta-500 transition-colors font-medium"
             >
-              About
+              Tatlılar
             </Link>
           </nav>
 

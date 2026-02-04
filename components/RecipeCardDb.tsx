@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Clock, Users, ChefHat } from "lucide-react";
 import type { RecipeWithAuthor } from "@/lib/types";
 
@@ -10,6 +11,7 @@ interface RecipeCardDbProps {
 }
 
 export function RecipeCardDb({ recipe, showAuthor = true }: RecipeCardDbProps) {
+  const router = useRouter();
   const authorName = recipe.profiles?.full_name || recipe.profiles?.username || "Anonim Chef";
   const authorUsername = recipe.profiles?.username;
   const difficultyColors = {
@@ -19,7 +21,11 @@ export function RecipeCardDb({ recipe, showAuthor = true }: RecipeCardDbProps) {
   };
 
   const handleAuthorClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
+    if (authorUsername) {
+      router.push(`/profile/${authorUsername}`);
+    }
   };
 
   return (
@@ -73,13 +79,12 @@ export function RecipeCardDb({ recipe, showAuthor = true }: RecipeCardDbProps) {
                 <Users className="w-3.5 h-3.5 text-terracotta-600" />
               </div>
               {authorUsername ? (
-                <Link
-                  href={`/profile/${authorUsername}`}
+                <span
                   onClick={handleAuthorClick}
-                  className="text-xs text-charcoal-700/70 hover:text-terracotta-500 truncate transition-colors"
+                  className="text-xs text-charcoal-700/70 hover:text-terracotta-500 truncate transition-colors cursor-pointer"
                 >
                   {authorName}
-                </Link>
+                </span>
               ) : (
                 <span className="text-xs text-charcoal-700/70 truncate">
                   {authorName}
