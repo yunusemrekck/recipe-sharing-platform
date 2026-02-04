@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Clock, Users, ChefHat } from "lucide-react";
 import type { RecipeWithAuthor } from "@/lib/types";
+import { RECIPE_CATEGORIES } from "@/lib/types";
 
 interface RecipeCardDbProps {
   recipe: RecipeWithAuthor;
@@ -14,6 +15,10 @@ export function RecipeCardDb({ recipe, showAuthor = true }: RecipeCardDbProps) {
   const router = useRouter();
   const authorName = recipe.profiles?.full_name || recipe.profiles?.username || "Anonim Chef";
   const authorUsername = recipe.profiles?.username;
+  
+  // Get category label from RECIPE_CATEGORIES
+  const categoryLabel = RECIPE_CATEGORIES.find(c => c.value === recipe.category)?.label || recipe.category;
+  
   const difficultyColors = {
     easy: "bg-green-100 text-green-700",
     medium: "bg-yellow-100 text-yellow-700",
@@ -57,7 +62,7 @@ export function RecipeCardDb({ recipe, showAuthor = true }: RecipeCardDbProps) {
           {recipe.category && (
             <div className="mb-3">
               <span className="inline-block px-2.5 py-1 text-xs font-medium rounded-full bg-sage-100 text-sage-700">
-                {recipe.category}
+                {categoryLabel}
               </span>
             </div>
           )}

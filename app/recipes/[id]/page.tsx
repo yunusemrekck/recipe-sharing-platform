@@ -11,6 +11,7 @@ import {
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RecipeActions } from "@/components/RecipeActions";
+import { DeleteRecipeButton } from "@/components/DeleteRecipeButton";
 import { getRecipeById } from "@/app/recipes/actions";
 import { getUser } from "@/app/auth/actions";
 import { RECIPE_CATEGORIES, DIFFICULTY_LEVELS } from "@/lib/types";
@@ -167,13 +168,20 @@ export default async function RecipeDetailPage({ params }: Props) {
                 <div className="flex items-center gap-2">
                   <RecipeActions />
                   {isOwner && (
-                    <Link
-                      href={`/recipes/${recipe.id}/edit`}
-                      className="flex items-center gap-2 px-4 py-2 bg-terracotta-500 hover:bg-terracotta-600 text-cream-50 rounded-lg font-medium transition-colors"
-                    >
-                      <Pencil className="w-4 h-4" />
-                      Düzenle
-                    </Link>
+                    <>
+                      <DeleteRecipeButton 
+                        recipeId={recipe.id} 
+                        recipeTitle={recipe.title}
+                        variant="icon"
+                      />
+                      <Link
+                        href={`/recipes/${recipe.id}/edit`}
+                        className="flex items-center gap-2 px-4 py-2 bg-terracotta-500 hover:bg-terracotta-600 text-cream-50 rounded-lg font-medium transition-colors"
+                      >
+                        <Pencil className="w-4 h-4" />
+                        Düzenle
+                      </Link>
+                    </>
                   )}
                 </div>
               </div>

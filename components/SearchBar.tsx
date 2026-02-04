@@ -6,33 +6,36 @@ import { useRouter } from "next/navigation";
 
 interface SearchBarProps {
   className?: string;
+  defaultValue?: string;
 }
 
-export function SearchBar({ className = "" }: SearchBarProps) {
+export function SearchBar({ className = "", defaultValue = "" }: SearchBarProps) {
   const [searchFocused, setSearchFocused] = useState(false);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(defaultValue);
   const router = useRouter();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (query.trim()) {
       router.push(`/recipes?search=${encodeURIComponent(query.trim())}`);
+    } else {
+      router.push("/recipes");
     }
   }
 
   return (
     <form
       onSubmit={handleSubmit}
-      className={`items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
+      className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-200 ${
         searchFocused
           ? "border-terracotta-400 bg-white shadow-sm w-64"
           : "border-cream-300 bg-cream-100/50 w-48"
       } ${className}`}
     >
-      <Search className="w-4 h-4 text-charcoal-700/50" />
+      <Search className="w-4 h-4 text-charcoal-700/50 flex-shrink-0" />
       <input
         type="text"
-        placeholder="Search recipes..."
+        placeholder="Tarif ara..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="bg-transparent text-sm text-charcoal-800 placeholder:text-charcoal-700/40 outline-none w-full"

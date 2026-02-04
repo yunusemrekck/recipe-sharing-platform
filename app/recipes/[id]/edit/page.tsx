@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RecipeForm } from "@/components/RecipeForm";
+import { DeleteRecipeButton } from "@/components/DeleteRecipeButton";
 import { getRecipeById } from "@/app/recipes/actions";
 import { getUser } from "@/app/auth/actions";
 
@@ -61,13 +62,22 @@ export default async function EditRecipePage({ params }: Props) {
           </Link>
 
           {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="font-display text-3xl lg:text-4xl font-bold text-charcoal-800 mb-2">
-              Tarifi Düzenle
-            </h1>
-            <p className="text-charcoal-700/60">
-              {recipe.title}
-            </p>
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
+            <div>
+              <h1 className="font-display text-3xl lg:text-4xl font-bold text-charcoal-800 mb-2">
+                Tarifi Düzenle
+              </h1>
+              <p className="text-charcoal-700/60">
+                {recipe.title}
+              </p>
+            </div>
+
+            {/* Delete Button */}
+            <DeleteRecipeButton 
+              recipeId={recipe.id} 
+              recipeTitle={recipe.title}
+              variant="button"
+            />
           </div>
 
           {/* Recipe Form */}

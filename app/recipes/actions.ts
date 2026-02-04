@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { RecipeWithAuthor } from "@/lib/types";
 
@@ -202,7 +201,7 @@ export async function deleteRecipe(recipeId: string): Promise<RecipeActionResult
   revalidatePath("/dashboard");
   revalidatePath("/my-recipes");
 
-  redirect("/my-recipes");
+  return { success: true };
 }
 
 /**
@@ -224,7 +223,10 @@ export async function getRecipeById(recipeId: string): Promise<RecipeWithAuthor 
     .single();
 
   if (error) {
-    console.error("Error fetching recipe:", error);
+    // PGRST116 = "Row not found" - this is expected for deleted recipes
+    if (error.code !== "PGRST116") {
+      console.error("Error fetching recipe:", error);
+    }
     return null;
   }
 
@@ -266,7 +268,7 @@ export async function getRecipes(options?: {
   }
 
   if (search) {
-    query = query.or(`title.ilike.%${search}%,ingredients.ilike.%${search}%`);
+    query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%,ingredients.ilike.%${search}%`);
   }
 
   // Sorting
